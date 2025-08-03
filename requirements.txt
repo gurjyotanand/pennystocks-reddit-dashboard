@@ -1,0 +1,7 @@
+Flask
+pandas
+gunicorn
+praw
+reticker
+python-dotenv
+requests
