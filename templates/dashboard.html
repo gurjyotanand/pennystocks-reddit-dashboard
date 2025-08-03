@@ -147,156 +147,12 @@
             color: #1d4ed8;
         }
 
-        .expand-btn.light {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .expand-btn.light:hover {
-            color: white;
-        }
-
         .table-container {
             background: white;
             border-radius: 15px;
             padding: 25px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .ticker-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
-        }
-
-        .ticker-table th {
-            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            color: white;
-            font-weight: bold;
-            padding: 15px;
-            text-align: center;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .ticker-table th:first-child {
-            border-top-left-radius: 10px;
-        }
-
-        .ticker-table th:last-child {
-            border-top-right-radius: 10px;
-        }
-
-        .ticker-table td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #e5e7eb;
-            vertical-align: middle;
-            font-size: 1rem;
-        }
-
-        .ticker-table tbody tr {
-            transition: all 0.2s ease;
-        }
-
-        .ticker-table tbody tr:hover {
-            background-color: #f8fafc;
-            transform: scale(1.02);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .ticker-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .ticker-table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 10px;
-        }
-
-        .ticker-table tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 10px;
-        }
-
-        .rank-badge {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .ticker-symbol {
-            font-weight: bold;
-            font-size: 1.3rem;
-            color: var(--success-color);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .mention-count {
-            background: var(--primary-color);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .percentage-bar {
-            background: #e5e7eb;
-            border-radius: 10px;
-            height: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .percentage-fill {
-            background: linear-gradient(90deg, var(--success-color), #22c55e);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .percentage-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .refresh-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .refresh-btn:hover {
-            transform: scale(1.1);
-            background: #1d4ed8;
         }
 
         .section-title {
@@ -312,38 +168,6 @@
             color: var(--primary-color);
         }
 
-        .watchlist-card {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .ticker-section {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .ticker-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
         .last-updated {
             background: #e5e7eb;
             padding: 10px 15px;
@@ -354,37 +178,94 @@
             color: var(--dark-color);
         }
 
+        .table thead th {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .card-gradient-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .card-gradient-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .card-gradient-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .card-gradient-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .card-gradient-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .card-gradient-6 { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+
+        /* Enhanced refresh button styles */
+        #refreshBtn {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        #refreshBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        #refreshBtn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Animation styles */
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .fade-update {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
             .dashboard-container {
                 margin: 10px;
                 padding: 20px;
             }
 
-            .refresh-btn {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
+            .stat-card h4 {
+                font-size: 1.5rem;
             }
 
-            .ticker-table {
-                font-size: 0.85rem;
+            .comment-card {
+                padding: 15px;
             }
 
-            .ticker-table th,
-            .ticker-table td {
-                padding: 10px 8px;
-            }
-
-            .ticker-symbol {
-                font-size: 1.1rem;
-            }
-
-            .rank-badge {
-                width: 28px;
-                height: 28px;
-                font-size: 0.9rem;
+            .table-container {
+                padding: 15px;
+                overflow-x: auto;
             }
         }
     </style>
@@ -400,98 +281,101 @@
                 </h1>
                 <p class="lead text-muted">Real-time analysis of r/pennystocks discussions</p>
 
+                <!-- Enhanced Refresh Button -->
+                <div class="mb-3">
+                    <button id="refreshBtn" class="btn btn-primary btn-lg" onclick="refreshData()" type="button">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        <span class="btn-text">Refresh Data</span>
+                    </button>
+                    <div class="mt-2">
+                        <small class="text-muted">Click to refresh data safely</small>
+                    </div>
+                </div>
+
                 <div class="last-updated">
                     <i class="bi bi-clock"></i>
-                    Last updated: {{ summary_stats.last_updated }}
+                    <span class="update-time">Last updated: {{ summary_stats.last_updated }}</span>
                 </div>
             </div>
 
             <!-- Summary Stats -->
             <div class="row mb-4">
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-1">
                         <div class="card-body">
-                            <h4>{{ summary_stats.total_comments }}</h4>
+                            <h4 id="total-comments" class="fade-update">{{ summary_stats.total_comments }}</h4>
                             <small>Total Comments</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-2">
                         <div class="card-body">
-                            <h4>{{ summary_stats.comments_with_tickers }}</h4>
+                            <h4 id="comments-with-tickers" class="fade-update">{{ summary_stats.comments_with_tickers }}</h4>
                             <small>With Tickers</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-3">
                         <div class="card-body">
-                            <h4>{{ summary_stats.unique_tickers }}</h4>
+                            <h4 id="unique-tickers" class="fade-update">{{ summary_stats.unique_tickers }}</h4>
                             <small>Unique Tickers</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-4">
                         <div class="card-body">
-                            <h4>{{ summary_stats.avg_score }}</h4>
+                            <h4 id="avg-score" class="fade-update">{{ summary_stats.avg_score }}</h4>
                             <small>Avg Score</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-5">
                         <div class="card-body">
-                            <h4>{{ summary_stats.max_score }}</h4>
+                            <h4 id="max-score" class="fade-update">{{ summary_stats.max_score }}</h4>
                             <small>Max Score</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="card stat-card">
+                    <div class="card stat-card card-gradient-6">
                         <div class="card-body">
-                            <h4>{{ summary_stats.users_1000_karma }}</h4>
-                            <small>High Karma</small>
+                            <h4 id="users-1000-karma" class="fade-update">{{ summary_stats.users_1000_karma }}</h4>
+                            <small>High Karma Users</small>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Top 10 Tickers Table -->
+            <!-- Top 10 Most Mentioned Tickers -->
             <div class="table-container">
                 <h3 class="section-title">
-                    <i class="bi bi-trophy"></i>
+                    <i class="bi bi-trophy-fill"></i>
                     Top 10 Most Mentioned Tickers
                 </h3>
                 <div class="table-responsive">
-                    <table class="table ticker-table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 15%;">Rank</th>
-                                <th style="width: 25%;">Ticker Symbol</th>
-                                <th style="width: 20%;">Mentions</th>
-                                <th style="width: 40%;">Distribution</th>
+                                <th>Rank</th>
+                                <th>Ticker</th>
+                                <th>Mentions</th>
+                                <th>Popularity</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% set total_mentions = top_10_tickers | sum(attribute=1) %}
                             {% for ticker, count in top_10_tickers %}
                             <tr>
+                                <td><strong>#{{ loop.index }}</strong></td>
+                                <td><span class="ticker-badge">{{ ticker }}</span></td>
+                                <td><span class="score-badge">{{ count }}</span></td>
                                 <td>
-                                    <span class="rank-badge">{{ loop.index }}</span>
-                                </td>
-                                <td>
-                                    <span class="ticker-symbol">${{ ticker }}</span>
-                                </td>
-                                <td>
-                                    <span class="mention-count">{{ count }}</span>
-                                </td>
-                                <td>
-                                    {% set percentage = ((count / total_mentions) * 100) | round(1) %}
-                                    <div class="percentage-bar">
-                                        <div class="percentage-fill" style="width: {{ percentage }}%;"></div>
-                                        <div class="percentage-text">{{ percentage }}%</div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" 
+                                             style="width: {{ (count / top_10_tickers[0][1] * 100) if top_10_tickers else 0 }}%"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -501,347 +385,268 @@
                 </div>
             </div>
 
-            <div class="row">
-                <!-- Top Comments -->
-                <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="section-title">
-                                <i class="bi bi-chat-dots"></i>
-                                Top 20 Comments by Score
-                            </h3>
-                            <div style="max-height: 600px; overflow-y: auto;">
-                                {% for comment in top_20_comments %}
-                                <div class="comment-card">
-                                    <div class="author-info">
-                                        <span class="author-name">{{ comment.author }}</span>
-                                        <span class="score-badge">{{ comment.score }}</span>
-                                        {% if comment.author_total_karma %}
-                                        <span class="karma-info">{{ comment.author_total_karma }} karma</span>
-                                        {% endif %}
-                                    </div>
-
-                                    {% set comment_length = comment.body|length %}
-                                    {% if comment_length > 300 %}
-                                    <!-- Long comment with expand/collapse -->
-                                    <div class="comment-text collapsed" id="comment-{{ loop.index }}">
-                                        {{ comment.body }}
-                                    </div>
-                                    <button class="expand-btn" onclick="toggleComment('comment-{{ loop.index }}', this)">
-                                        <i class="bi bi-chevron-down"></i> Show More
-                                    </button>
-                                    {% else %}
-                                    <!-- Short comment, show in full -->
-                                    <div class="comment-text">{{ comment.body }}</div>
-                                    {% endif %}
-
-                                    {% if comment.tickers %}
-                                    <div class="mb-2">
-                                        {% for ticker in comment.tickers.split(', ') %}
-                                        {% if ticker.strip() %}
-                                        <span class="ticker-badge">${{ ticker.strip() }}</span>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                    {% endif %}
-
-                                    <div class="timestamp">
-                                        <i class="bi bi-clock"></i>
-                                        {{ comment.created_utc }}
-                                    </div>
-                                </div>
+            <!-- Top 20 Highest Scored Comments -->
+            <div class="table-container">
+                <h3 class="section-title">
+                    <i class="bi bi-star-fill"></i>
+                    Top 20 Highest Scored Comments
+                </h3>
+                <div class="row">
+                    {% for comment in top_20_comments %}
+                    <div class="col-lg-6 mb-3">
+                        <div class="comment-card">
+                            <div class="author-info">
+                                <span class="author-name">{{ comment.author }}</span>
+                                <span class="karma-info">{{ comment.author_total_karma }} karma</span>
+                                <span class="score-badge">{{ comment.score }}</span>
+                            </div>
+                            <div class="comment-text collapsed" id="comment-{{ loop.index }}">
+                                {{ comment.body }}
+                            </div>
+                            {% if comment.tickers %}
+                            <div class="mb-2">
+                                {% for ticker in comment.tickers.split(', ') %}
+                                <span class="ticker-badge">{{ ticker }}</span>
                                 {% endfor %}
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Watchlist -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="section-title">
-                                <i class="bi bi-star"></i>
-                                Watchlist
-                            </h3>
-                            <p class="text-muted small mb-3">High-karma users (500+) with multiple tickers (4+), ranked by score</p>
-
-                            {% if watchlist_comments %}
-                            {% for comment in watchlist_comments %}
-                            <div class="watchlist-card">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <strong>{{ comment.author }}</strong>
-                                    <div class="text-end">
-                                        <div><span class="badge bg-success">{{ comment.score }}</span></div>
-                                        <small>{{ comment.author_total_karma }} karma</small>
-                                    </div>
-                                </div>
-
-                                {% if comment.tickers %}
-                                <div class="mb-2">
-                                    {% for ticker in comment.tickers.split(', ') %}
-                                    {% if ticker.strip() %}
-                                    <span class="badge bg-light text-dark me-1">${{ ticker.strip() }}</span>
-                                    {% endif %}
-                                    {% endfor %}
-                                    <small class="text-light opacity-75">({{ comment.ticker_count }} tickers)</small>
-                                </div>
-                                {% endif %}
-
-                                {% set comment_length = comment.body|length %}
-                                {% if comment_length > 200 %}
-                                <div class="comment-text collapsed" id="watchlist-{{ loop.index }}">
-                                    {{ comment.body }}
-                                </div>
-                                <button class="expand-btn light" onclick="toggleComment('watchlist-{{ loop.index }}', this)">
-                                    <i class="bi bi-chevron-down"></i> Show More
-                                </button>
-                                {% else %}
-                                <div class="small">{{ comment.body }}</div>
-                                {% endif %}
-
-                                <small class="opacity-75 d-block mt-2">{{ comment.created_utc }}</small>
-                            </div>
-                            {% endfor %}
-                            {% else %}
-                            <div class="text-center p-4">
-                                <i class="bi bi-info-circle text-muted" style="font-size: 2rem;"></i>
-                                <p class="text-muted mt-2">No comments meet watchlist criteria</p>
-                                <small class="text-muted">Looking for users with 500+ karma mentioning 4+ tickers</small>
-                            </div>
                             {% endif %}
+                            <div class="timestamp">{{ comment.created_utc }}</div>
+                            <button class="expand-btn" onclick="toggleComment('comment-{{ loop.index }}', this)">
+                                <i class="bi bi-chevron-down"></i> Show More
+                            </button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            <!-- Watchlist - High Quality Multi-Ticker Comments -->
+            {% if watchlist_comments %}
+            <div class="table-container">
+                <h3 class="section-title">
+                    <i class="bi bi-eye-fill"></i>
+                    Watchlist - High Quality Multi-Ticker Comments
+                </h3>
+                <div class="row">
+                    {% for comment in watchlist_comments %}
+                    <div class="col-lg-6 mb-3">
+                        <div class="comment-card" style="border-left-color: var(--warning-color);">
+                            <div class="author-info">
+                                <span class="author-name">{{ comment.author }}</span>
+                                <span class="karma-info">{{ comment.author_total_karma }} karma</span>
+                                <span class="score-badge">{{ comment.score }}</span>
+                                <small class="text-muted">{{ comment.ticker_count }} tickers</small>
+                            </div>
+                            <div class="comment-text collapsed" id="watchlist-{{ loop.index }}">
+                                {{ comment.body }}
+                            </div>
+                            <div class="mb-2">
+                                {% for ticker in comment.tickers.split(', ') %}
+                                <span class="ticker-badge">{{ ticker }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="timestamp">{{ comment.created_utc }}</div>
+                            <button class="expand-btn" onclick="toggleComment('watchlist-{{ loop.index }}', this)">
+                                <i class="bi bi-chevron-down"></i> Show More
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
             <!-- Latest Comments by Top Tickers -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="section-title">
-                                <i class="bi bi-fire"></i>
-                                Latest Comments for Top 5 Tickers
-                            </h3>
-
-                            {% for ticker, comments in latest_comments_by_ticker.items() %}
-                            <div class="ticker-section">
-                                <div class="ticker-title">
-                                    <i class="bi bi-currency-dollar"></i>
-                                    {{ ticker }}
+            {% if latest_comments_by_ticker %}
+            <div class="table-container">
+                <h3 class="section-title">
+                    <i class="bi bi-clock-fill"></i>
+                    Latest Comments by Top Tickers
+                </h3>
+                {% for ticker, comments in latest_comments_by_ticker.items() %}
+                <div class="mb-4">
+                    <h5 class="mb-3">
+                        <span class="ticker-badge" style="font-size: 1rem; padding: 6px 12px;">{{ ticker }}</span>
+                        Latest Discussions
+                    </h5>
+                    <div class="row">
+                        {% for comment in comments %}
+                        <div class="col-lg-4 mb-3">
+                            <div class="comment-card" style="border-left-color: var(--success-color);">
+                                <div class="author-info">
+                                    <span class="author-name">{{ comment.author }}</span>
+                                    <span class="karma-info">{{ comment.author_total_karma }} karma</span>
+                                    <span class="score-badge">{{ comment.score }}</span>
                                 </div>
-
-                                <div class="row">
-                                    {% for comment in comments %}
-                                    <div class="col-md-6 col-lg-4 mb-3">
-                                        <div class="card h-100 border-0 shadow-sm">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <small class="text-muted">{{ comment.author }}</small>
-                                                    <span class="badge bg-secondary">{{ comment.score }}</span>
-                                                </div>
-
-                                                {% set comment_length = comment.body|length %}
-                                                {% if comment_length > 150 %}
-                                                <div class="comment-text collapsed" id="ticker-{{ ticker }}-{{ loop.index }}">
-                                                    {{ comment.body }}
-                                                </div>
-                                                <button class="expand-btn" onclick="toggleComment('ticker-{{ ticker }}-{{ loop.index }}', this)">
-                                                    <i class="bi bi-chevron-down"></i> More
-                                                </button>
-                                                {% else %}
-                                                <div class="small mb-2">{{ comment.body }}</div>
-                                                {% endif %}
-
-                                                {% if comment.author_total_karma %}
-                                                <div class="karma-info mb-2">{{ comment.author_total_karma }} karma</div>
-                                                {% endif %}
-
-                                                <small class="text-muted">{{ comment.created_utc }}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
+                                <div class="comment-text collapsed" id="latest-{{ ticker }}-{{ loop.index }}">
+                                    {{ comment.body }}
                                 </div>
+                                <div class="timestamp">{{ comment.created_utc }}</div>
+                                <button class="expand-btn" onclick="toggleComment('latest-{{ ticker }}-{{ loop.index }}', this)">
+                                    <i class="bi bi-chevron-down"></i> Show More
+                                </button>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endfor %}
             </div>
+            {% endif %}
         </div>
     </div>
 
-    <!-- Refresh Button -->
-    <button class="refresh-btn" onclick="refreshData()" title="Refresh Data">
-        <i id="refresh-icon" class="bi bi-arrow-clockwise"></i>
-    </button>
-    <!-- Enhanced Refresh Button -->
-<div class="text-center mb-4">
-    <button id="refreshBtn" class="btn btn-primary btn-lg" onclick="refreshData()" type="button">
-        <i class="bi bi-arrow-clockwise"></i>
-        <span class="btn-text">Refresh Data</span>
-    </button>
-    <div class="mt-2">
-        <small class="text-muted">Click to refresh data</small>
-    </div>
-</div>
-
-<script>
-let isRefreshing = false;
-
-async function refreshData() {
-    if (isRefreshing) return;
-    
-    const refreshBtn = document.getElementById('refreshBtn');
-    const refreshIcon = refreshBtn.querySelector('i');
-    const refreshText = refreshBtn.querySelector('.btn-text');
-    
-    // Update button state
-    isRefreshing = true;
-    refreshBtn.disabled = true;
-    refreshIcon.className = 'bi bi-arrow-clockwise spinning';
-    refreshText.textContent = 'Refreshing...';
-    
-    try {
-        console.log('🔄 Starting data refresh...');
-        
-        // Call the safe refresh endpoint
-        const refreshResponse = await fetch('/api/refresh', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
-        if (!refreshResponse.ok) {
-            throw new Error(`Refresh failed: ${refreshResponse.status}`);
-        }
-        
-        // Get updated data
-        const dataResponse = await fetch('/api/data');
-        
-        if (!dataResponse.ok) {
-            throw new Error(`Data fetch failed: ${dataResponse.status}`);
-        }
-        
-        const newData = await dataResponse.json();
-        console.log('📊 New data loaded successfully');
-        
-        // Update dashboard elements
-        updateDashboard(newData);
-        
-        // Success notification
-        showNotification('✅ Data refreshed successfully!', 'success');
-        
-    } catch (error) {
-        console.error('❌ Refresh error:', error);
-        showNotification(`❌ Refresh failed: ${error.message}`, 'error');
-    } finally {
-        // Reset button state
-        isRefreshing = false;
-        refreshBtn.disabled = false;
-        refreshIcon.className = 'bi bi-arrow-clockwise';
-        refreshText.textContent = 'Refresh Data';
-    }
-}
-
-function updateDashboard(data) {
-    try {
-        // Update summary stats with animation
-        if (data.summary_stats) {
-            updateElement('total-comments', data.summary_stats.total_comments);
-            updateElement('comments-with-tickers', data.summary_stats.comments_with_tickers);
-            updateElement('unique-tickers', data.summary_stats.unique_tickers);
-            updateElement('avg-score', data.summary_stats.avg_score);
-            updateElement('max-score', data.summary_stats.max_score);
-            updateElement('users-1000-karma', data.summary_stats.users_1000_karma);
-        }
-        
-        console.log('📈 Dashboard updated successfully');
-    } catch (error) {
-        console.error('Error updating dashboard:', error);
-    }
-}
-
-function updateElement(id, value) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.style.opacity = '0.5';
-        setTimeout(() => {
-            element.textContent = value;
-            element.style.opacity = '1';
-        }, 150);
-    }
-}
-
-function showNotification(message, type) {
-    // Remove existing notifications
-    const existing = document.querySelector('.notification');
-    if (existing) existing.remove();
-    
-    // Create notification
-    const notification = document.createElement('div');
-    notification.className = `notification alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1050;
-        min-width: 300px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    `;
-    
-    notification.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
-    }, 5000);
-}
-
-// Add CSS for spinning animation
-const style = document.createElement('style');
-style.textContent = `
-    .spinning {
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    
-    .notification {
-        animation: slideIn 0.3s ease-out;
-    }
-    
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateX(100%); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-`;
-document.head.appendChild(style);
-
-console.log('🔵 Enhanced refresh system loaded');
-</script>
-
-    <!-- Loading Spinner -->
-    <div class="loading-spinner" id="loadingSpinner">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Refreshing data...</p>
-    </div>
-
+    <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enhanced Refresh Functionality -->
     <script>
+        let isRefreshing = false;
+
+        async function refreshData() {
+            if (isRefreshing) {
+                return; // Prevent multiple simultaneous refreshes
+            }
+
+            const refreshBtn = document.getElementById('refreshBtn');
+            const refreshIcon = refreshBtn.querySelector('i');
+            const refreshText = refreshBtn.querySelector('.btn-text');
+
+            // Update button state
+            isRefreshing = true;
+            refreshBtn.disabled = true;
+            refreshIcon.className = 'bi bi-arrow-clockwise spinning me-2';
+            refreshText.textContent = 'Refreshing...';
+
+            try {
+                console.log('🔄 Starting data refresh...');
+
+                // First, call the safe refresh endpoint
+                const refreshResponse = await fetch('/api/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!refreshResponse.ok) {
+                    throw new Error(`Refresh failed: ${refreshResponse.status}`);
+                }
+
+                const refreshResult = await refreshResponse.json();
+                console.log('✅ Refresh response:', refreshResult);
+
+                // Wait a moment for dramatic effect
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Now get the updated data
+                const dataResponse = await fetch('/api/data');
+
+                if (!dataResponse.ok) {
+                    throw new Error(`Data fetch failed: ${dataResponse.status}`);
+                }
+
+                const newData = await dataResponse.json();
+                console.log('📊 New data loaded successfully');
+
+                // Update the page with new data
+                updateDashboard(newData);
+
+                // Update last updated timestamp
+                updateLastUpdatedTime(refreshResult.timestamp);
+
+                // Success feedback
+                showNotification('✅ Data refreshed successfully!', 'success');
+
+            } catch (error) {
+                console.error('❌ Refresh error:', error);
+                showNotification(`❌ Refresh failed: ${error.message}`, 'error');
+            } finally {
+                // Reset button state
+                isRefreshing = false;
+                refreshBtn.disabled = false;
+                refreshIcon.className = 'bi bi-arrow-clockwise me-2';
+                refreshText.textContent = 'Refresh Data';
+            }
+        }
+
+        function updateDashboard(data) {
+            try {
+                // Update summary stats
+                if (data.summary_stats) {
+                    updateElement('total-comments', data.summary_stats.total_comments);
+                    updateElement('comments-with-tickers', data.summary_stats.comments_with_tickers);
+                    updateElement('unique-tickers', data.summary_stats.unique_tickers);
+                    updateElement('avg-score', data.summary_stats.avg_score);
+                    updateElement('max-score', data.summary_stats.max_score);
+                    updateElement('users-1000-karma', data.summary_stats.users_1000_karma);
+                }
+
+                console.log('📈 Dashboard updated successfully');
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+            }
+        }
+
+        function updateElement(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                // Add a subtle animation
+                element.style.opacity = '0.5';
+                setTimeout(() => {
+                    element.textContent = value;
+                    element.style.opacity = '1';
+                }, 150);
+            }
+        }
+
+        function updateLastUpdatedTime(timestamp) {
+            const elements = document.querySelectorAll('.last-updated .update-time, .update-time');
+            elements.forEach(element => {
+                if (element) {
+                    element.style.opacity = '0.5';
+                    setTimeout(() => {
+                        element.textContent = `Last updated: ${timestamp}`;
+                        element.style.opacity = '1';
+                    }, 150);
+                }
+            });
+        }
+
+        function showNotification(message, type) {
+            // Remove existing notifications
+            const existing = document.querySelector('.notification');
+            if (existing) {
+                existing.remove();
+            }
+
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = `notification alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1050;
+                min-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
         // Function to toggle comment expansion
         function toggleComment(commentId, button) {
             const commentElement = document.getElementById(commentId);
@@ -852,70 +657,20 @@ console.log('🔵 Enhanced refresh system loaded');
                 if (icon) {
                     icon.className = 'bi bi-chevron-up';
                 }
-                button.innerHTML = button.innerHTML.replace('Show More', 'Show Less').replace('More', 'Less');
+                button.innerHTML = button.innerHTML.replace('Show More', 'Show Less');
             } else {
                 commentElement.classList.add('collapsed');
                 if (icon) {
                     icon.className = 'bi bi-chevron-down';
                 }
-                button.innerHTML = button.innerHTML.replace('Show Less', 'Show More').replace('Less', 'More');
+                button.innerHTML = button.innerHTML.replace('Show Less', 'Show More');
             }
         }
 
-        // Refresh functionality
-        function refreshData() {
-            const refreshIcon = document.getElementById('refresh-icon');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-
-            refreshIcon.className = 'bi bi-arrow-clockwise';
-            refreshIcon.style.animation = 'spin 1s linear infinite';
-            loadingSpinner.style.display = 'block';
-
-            fetch('/api/data')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                })
-                .catch(error => {
-                    console.error('Error refreshing data:', error);
-                    refreshIcon.style.animation = '';
-                    refreshIcon.className = 'bi bi-exclamation-triangle';
-                    loadingSpinner.style.display = 'none';
-
-                    setTimeout(() => {
-                        refreshIcon.className = 'bi bi-arrow-clockwise';
-                    }, 3000);
-                });
-        }
-
-        // Auto-refresh every 10 minutes
-        setInterval(refreshData, 600000);
-
-        // Add CSS animation for spinning
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Smooth scroll
-        window.addEventListener('scroll', function() {
-            const refreshBtn = document.querySelector('.refresh-btn');
-            if (window.scrollY > 300) {
-                refreshBtn.style.opacity = '0.8';
-            } else {
-                refreshBtn.style.opacity = '1';
-            }
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔵 Enhanced refresh system loaded');
+            console.log('✅ Dashboard ready');
         });
     </script>
 </body>
