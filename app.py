@@ -1,27 +1,41 @@
 #!/usr/bin/env python3
 """
-Reddit Penny Stocks Dashboard
-Flask application for visualizing r/pennystocks data
+Reddit Penny Stocks Dashboard - Production Version
+No auto-reload, optimized for production deployment
 """
 
 import json
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import Flask, render_template, jsonify
 import os
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-change-this'
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'production-secret-key')
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Production logging configuration
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Disable Flask debug mode completely
+app.config['DEBUG'] = False
+app.config['TESTING'] = False
 
 def get_data_refresh_timestamp():
     """Get the most accurate data refresh timestamp"""
-    # Try to get timestamp from metadata file first (most accurate)
-    metadata_file = 'data_metadata.json'
+    metadata_file = os.environ.get('METADATA_FILE_PATH', 'data_metadata.json')
+
     if os.path.exists(metadata_file):
         try:
             with open(metadata_file, 'r') as f:
@@ -29,42 +43,32 @@ def get_data_refresh_timestamp():
                 if metadata.get('success', False):
                     scrape_time = datetime.fromisoformat(metadata['scrape_end_time'])
                     return scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')
-        except:
-            pass
+        except Exception as e:
+            logger.warning(f"Error reading metadata file: {e}")
 
     # Fallback to file modification time
-    data_files = [
+    data_file_paths = [
         'lounge_thread_filtered_comments.json',
-        'data/lounge_thread_filtered_comments.json',
-        '/app/data/lounge_thread_filtered_comments.json'
+        '/app/lounge_thread_filtered_comments.json'
     ]
 
-    for file_path in data_files:
+    for file_path in data_file_paths:
         if os.path.exists(file_path):
-            mod_time = os.path.getmtime(file_path)
-            return datetime.fromtimestamp(mod_time).strftime('%Y-%m-%d %H:%M:%S UTC')
+            try:
+                mod_time = os.path.getmtime(file_path)
+                return datetime.fromtimestamp(mod_time).strftime('%Y-%m-%d %H:%M:%S UTC')
+            except Exception as e:
+                logger.warning(f"Error getting modification time for {file_path}: {e}")
 
     return "Unknown"
 
-def get_data_metadata():
-    """Get additional metadata about the data"""
-    metadata_file = 'data_metadata.json'
-    if os.path.exists(metadata_file):
-        try:
-            with open(metadata_file, 'r') as f:
-                return json.load(f)
-        except:
-            pass
-    return {}
-
 def load_and_process_data():
-    """Load and process the Reddit data"""
+    """Load and process the Reddit data with error handling"""
     try:
         # Try different possible locations for the data file
         data_files = [
             'lounge_thread_filtered_comments.json',
-            'data/lounge_thread_filtered_comments.json',
-            '/app/data/lounge_thread_filtered_comments.json'
+            '/app/lounge_thread_filtered_comments.json'
         ]
 
         data_file = None
@@ -83,7 +87,11 @@ def load_and_process_data():
         logger.info(f"Loaded {len(comments_data)} comments from {data_file}")
         df = pd.DataFrame(comments_data)
 
-        # 1. Top 10 tickers based on mentions
+        if df.empty:
+            logger.warning("DataFrame is empty")
+            return None
+
+        # Process data safely
         ticker_mentions = {}
         ticker_comments = df[df['tickers'] != '']
 
@@ -95,20 +103,20 @@ def load_and_process_data():
 
         top_10_tickers = sorted(ticker_mentions.items(), key=lambda x: x[1], reverse=True)[:10]
 
-        # 2. Top 20 comments based on score
+        # Top 20 comments based on score
         top_20_comments = df.nlargest(20, 'score')[
             ['author', 'score', 'body', 'tickers', 'created_utc', 'author_total_karma']
         ].to_dict('records')
 
-        # 3. WATCHLIST - High-quality comments with multiple tickers from experienced users
+        # Watchlist - High-quality comments
         watchlist_comments = df[
-            (df['ticker_count'] >= 4) & 
-            (df['author_total_karma'] >= 500)
+            (df['ticker_count'] >= 2) & 
+            (df['author_total_karma'] >= 1000)
         ].sort_values('score', ascending=False).head(10)[
             ['author', 'score', 'body', 'tickers', 'created_utc', 'author_total_karma', 'ticker_count']
         ].to_dict('records')
 
-        # 4. Latest 5 comments for top 5 tickers
+        # Latest comments for top tickers
         top_5_tickers = [ticker for ticker, _ in top_10_tickers[:5]]
         latest_comments_by_ticker = {}
 
@@ -119,20 +127,18 @@ def load_and_process_data():
                 ['author', 'score', 'body', 'created_utc', 'author_total_karma']
             ].to_dict('records')
 
-        # Get precise data refresh timestamp
+        # Get data refresh timestamp
         data_refresh_time = get_data_refresh_timestamp()
-        metadata = get_data_metadata()
 
         # Summary stats
         summary_stats = {
             'total_comments': len(df),
             'comments_with_tickers': len(df[df['tickers'] != '']),
             'unique_tickers': len(ticker_mentions),
-            'avg_score': round(df['score'].mean(), 2),
-            'max_score': df['score'].max(),
+            'avg_score': round(df['score'].mean(), 2) if not df['score'].empty else 0,
+            'max_score': df['score'].max() if not df['score'].empty else 0,
             'users_1000_karma': len(df[df['author_total_karma'] >= 1000]),
-            'last_updated': data_refresh_time,
-            'scrape_duration': metadata.get('scrape_duration_seconds', 0)
+            'last_updated': data_refresh_time
         }
 
         return {
@@ -167,16 +173,25 @@ def api_data():
 
     return jsonify(data)
 
-@app.route('/api/metadata')
-def api_metadata():
-    """API endpoint for data metadata"""
-    metadata = get_data_metadata()
-    return jsonify(metadata)
-
 @app.route('/health')
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
+    try:
+        data = load_and_process_data()
+        status = 'healthy' if data else 'unhealthy'
+
+        return jsonify({
+            'status': status,
+            'timestamp': datetime.now().isoformat(),
+            'version': '1.0.0'
+        }), 200 if data else 503
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 503
 
 @app.errorhandler(404)
 def not_found(error):
@@ -188,5 +203,5 @@ def internal_error(error):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    debug = os.environ.get('FLASK_ENV') == 'development'
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    # Production settings - no debug, no auto-reload
+    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
