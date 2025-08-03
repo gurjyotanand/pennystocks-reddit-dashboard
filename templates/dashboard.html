@@ -677,6 +677,160 @@
     <button class="refresh-btn" onclick="refreshData()" title="Refresh Data">
         <i id="refresh-icon" class="bi bi-arrow-clockwise"></i>
     </button>
+    <!-- Enhanced Refresh Button -->
+<div class="text-center mb-4">
+    <button id="refreshBtn" class="btn btn-primary btn-lg" onclick="refreshData()" type="button">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span class="btn-text">Refresh Data</span>
+    </button>
+    <div class="mt-2">
+        <small class="text-muted">Click to refresh data</small>
+    </div>
+</div>
+
+<script>
+let isRefreshing = false;
+
+async function refreshData() {
+    if (isRefreshing) return;
+    
+    const refreshBtn = document.getElementById('refreshBtn');
+    const refreshIcon = refreshBtn.querySelector('i');
+    const refreshText = refreshBtn.querySelector('.btn-text');
+    
+    // Update button state
+    isRefreshing = true;
+    refreshBtn.disabled = true;
+    refreshIcon.className = 'bi bi-arrow-clockwise spinning';
+    refreshText.textContent = 'Refreshing...';
+    
+    try {
+        console.log('🔄 Starting data refresh...');
+        
+        // Call the safe refresh endpoint
+        const refreshResponse = await fetch('/api/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!refreshResponse.ok) {
+            throw new Error(`Refresh failed: ${refreshResponse.status}`);
+        }
+        
+        // Get updated data
+        const dataResponse = await fetch('/api/data');
+        
+        if (!dataResponse.ok) {
+            throw new Error(`Data fetch failed: ${dataResponse.status}`);
+        }
+        
+        const newData = await dataResponse.json();
+        console.log('📊 New data loaded successfully');
+        
+        // Update dashboard elements
+        updateDashboard(newData);
+        
+        // Success notification
+        showNotification('✅ Data refreshed successfully!', 'success');
+        
+    } catch (error) {
+        console.error('❌ Refresh error:', error);
+        showNotification(`❌ Refresh failed: ${error.message}`, 'error');
+    } finally {
+        // Reset button state
+        isRefreshing = false;
+        refreshBtn.disabled = false;
+        refreshIcon.className = 'bi bi-arrow-clockwise';
+        refreshText.textContent = 'Refresh Data';
+    }
+}
+
+function updateDashboard(data) {
+    try {
+        // Update summary stats with animation
+        if (data.summary_stats) {
+            updateElement('total-comments', data.summary_stats.total_comments);
+            updateElement('comments-with-tickers', data.summary_stats.comments_with_tickers);
+            updateElement('unique-tickers', data.summary_stats.unique_tickers);
+            updateElement('avg-score', data.summary_stats.avg_score);
+            updateElement('max-score', data.summary_stats.max_score);
+            updateElement('users-1000-karma', data.summary_stats.users_1000_karma);
+        }
+        
+        console.log('📈 Dashboard updated successfully');
+    } catch (error) {
+        console.error('Error updating dashboard:', error);
+    }
+}
+
+function updateElement(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.style.opacity = '0.5';
+        setTimeout(() => {
+            element.textContent = value;
+            element.style.opacity = '1';
+        }, 150);
+    }
+}
+
+function showNotification(message, type) {
+    // Remove existing notifications
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+    
+    // Create notification
+    const notification = document.createElement('div');
+    notification.className = `notification alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        min-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
+    
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Add CSS for spinning animation
+const style = document.createElement('style');
+style.textContent = `
+    .spinning {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .notification {
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(100%); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+`;
+document.head.appendChild(style);
+
+console.log('🔵 Enhanced refresh system loaded');
+</script>
 
     <!-- Loading Spinner -->
     <div class="loading-spinner" id="loadingSpinner">
