@@ -6,127 +6,290 @@
     <title>Reddit Penny Stocks Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2563eb;
-            --success-color: #16a34a;
-            --warning-color: #ca8a04;
-            --danger-color: #dc2626;
-            --dark-color: #1f2937;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-light: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-large: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .dashboard-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .refresh-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .refresh-btn {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .refresh-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .last-updated {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            color: white;
-            border-radius: 15px;
-            padding: 20px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
+            box-shadow: var(--shadow-light);
+            transition: all 0.2s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
         }
 
-        .stat-card h4 {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
         }
 
-        .stat-card small {
-            opacity: 0.9;
+        .stat-label {
             font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content-section {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-light);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .ticker-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .ticker-table th {
+            background: var(--background-color);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .ticker-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ticker-table tr:hover {
+            background: var(--background-color);
         }
 
         .ticker-badge {
             background: var(--success-color);
             color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin: 2px;
-            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
-        .score-badge {
-            background: var(--warning-color);
+        .mention-count {
+            background: var(--primary-color);
             color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background: var(--border-color);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+
+        .comment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
         }
 
         .comment-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--primary-color);
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
         }
 
         .comment-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
         }
 
         .author-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 0.75rem;
         }
 
         .author-name {
-            font-weight: bold;
-            color: var(--dark-color);
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .karma-info {
-            font-size: 0.8rem;
-            color: #6b7280;
-            background: #f3f4f6;
-            padding: 2px 8px;
-            border-radius: 10px;
+        .karma-badge {
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
         }
 
-        .timestamp {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-top: 10px;
+        .score-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
         .comment-text {
+            color: var(--text-primary);
             line-height: 1.6;
+            margin-bottom: 1rem;
             word-wrap: break-word;
-            word-break: break-word;
-            margin-bottom: 10px;
         }
 
         .comment-text.collapsed {
             display: -webkit-box;
-            -webkit-line-clamp: 5;
+            -webkit-line-clamp: 4;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -136,90 +299,28 @@
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: underline;
+            font-size: 0.875rem;
             padding: 0;
-            margin-top: 5px;
+            margin-top: 0.5rem;
             font-weight: 500;
         }
 
         .expand-btn:hover {
-            color: #1d4ed8;
+            color: var(--primary-dark);
         }
 
-        .table-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            color: var(--dark-color);
-            font-weight: bold;
-            margin-bottom: 20px;
+        .tickers-list {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .section-title i {
-            color: var(--primary-color);
+        .timestamp {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
-        .last-updated {
-            background: #e5e7eb;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: var(--dark-color);
-        }
-
-        .table thead th {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            font-weight: 600;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .card-gradient-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .card-gradient-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .card-gradient-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-        .card-gradient-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-        .card-gradient-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
-        .card-gradient-6 { background: linear-gradient(135deg, #a8edea, #fed6e3); }
-
-        /* Enhanced refresh button styles */
-        #refreshBtn {
-            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-        }
-
-        #refreshBtn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        #refreshBtn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Animation styles */
         .spinning {
             animation: spin 1s linear infinite;
         }
@@ -230,7 +331,40 @@
         }
 
         .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1050;
+            min-width: 350px;
+            max-width: 500px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-large);
             animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            color: #047857;
+        }
+
+        .notification.error {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #dc2626;
+        }
+
+        .notification.info {
+            background: #eff6ff;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-dark);
+        }
+
+        .notification.warning {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            color: #d97706;
         }
 
         @keyframes slideIn {
@@ -244,268 +378,226 @@
             }
         }
 
-        .fade-update {
-            transition: opacity 0.3s ease;
-        }
-
-        /* Responsive design */
         @media (max-width: 768px) {
             .dashboard-container {
-                margin: 10px;
-                padding: 20px;
+                padding: 1rem;
             }
 
-            .stat-card h4 {
-                font-size: 1.5rem;
+            .header h1 {
+                font-size: 2rem;
             }
 
-            .comment-card {
-                padding: 15px;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
 
-            .table-container {
-                padding: 15px;
-                overflow-x: auto;
+            .comment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notification {
+                left: 1rem;
+                right: 1rem;
+                min-width: unset;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="dashboard-container">
-            <!-- Header -->
-            <div class="text-center mb-4">
-                <h1 class="display-4 mb-3">
-                    <i class="bi bi-graph-up-arrow text-primary"></i>
-                    Reddit Penny Stocks Dashboard
-                </h1>
-                <p class="lead text-muted">Real-time analysis of r/pennystocks discussions</p>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="bi bi-graph-up-arrow" style="color: var(--primary-color);"></i>
+                Reddit Penny Stocks Dashboard
+            </h1>
+            <p class="subtitle">
+                Real-time analysis of r/pennystocks discussions
+            </p>
+        </div>
 
-                <!-- Enhanced Refresh Button -->
-                <div class="mb-3">
-                    <button id="refreshBtn" class="btn btn-primary btn-lg" onclick="refreshData()" type="button">
-                        <i class="bi bi-arrow-clockwise me-2"></i>
-                        <span class="btn-text">Refresh Data</span>
-                    </button>
-                    <div class="mt-2">
-                        <small class="text-muted">Click to refresh data safely</small>
-                    </div>
-                </div>
-
-                <div class="last-updated">
-                    <i class="bi bi-clock"></i>
-                    <span class="update-time">Last updated: {{ summary_stats.last_updated }}</span>
-                </div>
+        <!-- Refresh Section -->
+        <div class="refresh-section">
+            <button id="refreshBtn" class="refresh-btn" onclick="refreshData()" type="button">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span class="btn-text">Refresh Data</span>
+            </button>
+            <div class="last-updated">
+                <i class="bi bi-clock"></i>
+                <span class="update-time">Last updated: {{ summary_stats.last_updated }}</span>
             </div>
+        </div>
 
-            <!-- Summary Stats -->
-            <div class="row mb-4">
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-1">
-                        <div class="card-body">
-                            <h4 id="total-comments" class="fade-update">{{ summary_stats.total_comments }}</h4>
-                            <small>Total Comments</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-2">
-                        <div class="card-body">
-                            <h4 id="comments-with-tickers" class="fade-update">{{ summary_stats.comments_with_tickers }}</h4>
-                            <small>With Tickers</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-3">
-                        <div class="card-body">
-                            <h4 id="unique-tickers" class="fade-update">{{ summary_stats.unique_tickers }}</h4>
-                            <small>Unique Tickers</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-4">
-                        <div class="card-body">
-                            <h4 id="avg-score" class="fade-update">{{ summary_stats.avg_score }}</h4>
-                            <small>Avg Score</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-5">
-                        <div class="card-body">
-                            <h4 id="max-score" class="fade-update">{{ summary_stats.max_score }}</h4>
-                            <small>Max Score</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="card stat-card card-gradient-6">
-                        <div class="card-body">
-                            <h4 id="users-1000-karma" class="fade-update">{{ summary_stats.users_1000_karma }}</h4>
-                            <small>High Karma Users</small>
-                        </div>
-                    </div>
-                </div>
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div id="total-comments" class="stat-value">{{ summary_stats.total_comments }}</div>
+                <div class="stat-label">Total Comments</div>
             </div>
-
-            <!-- Top 10 Most Mentioned Tickers -->
-            <div class="table-container">
-                <h3 class="section-title">
-                    <i class="bi bi-trophy-fill"></i>
-                    Top 10 Most Mentioned Tickers
-                </h3>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Ticker</th>
-                                <th>Mentions</th>
-                                <th>Popularity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ticker, count in top_10_tickers %}
-                            <tr>
-                                <td><strong>#{{ loop.index }}</strong></td>
-                                <td><span class="ticker-badge">{{ ticker }}</span></td>
-                                <td><span class="score-badge">{{ count }}</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-success" 
-                                             style="width: {{ (count / top_10_tickers[0][1] * 100) if top_10_tickers else 0 }}%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="stat-card">
+                <div id="comments-with-tickers" class="stat-value">{{ summary_stats.comments_with_tickers }}</div>
+                <div class="stat-label">Comments with Tickers</div>
             </div>
+            <div class="stat-card">
+                <div id="unique-tickers" class="stat-value">{{ summary_stats.unique_tickers }}</div>
+                <div class="stat-label">Unique Tickers</div>
+            </div>
+        </div>
 
-            <!-- Top 20 Highest Scored Comments -->
-            <div class="table-container">
-                <h3 class="section-title">
-                    <i class="bi bi-star-fill"></i>
-                    Top 20 Highest Scored Comments
-                </h3>
-                <div class="row">
-                    {% for comment in top_20_comments %}
-                    <div class="col-lg-6 mb-3">
-                        <div class="comment-card">
-                            <div class="author-info">
-                                <span class="author-name">{{ comment.author }}</span>
-                                <span class="karma-info">{{ comment.author_total_karma }} karma</span>
-                                <span class="score-badge">{{ comment.score }}</span>
+        <!-- Top 10 Most Mentioned Tickers -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="bi bi-trophy-fill"></i>
+                Top 10 Most Mentioned Tickers
+            </h2>
+            <table class="ticker-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Ticker</th>
+                        <th>Mentions</th>
+                        <th>Popularity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticker, count in top_10_tickers %}
+                    <tr>
+                        <td><strong>#{{ loop.index }}</strong></td>
+                        <td><span class="ticker-badge">{{ ticker }}</span></td>
+                        <td><span class="mention-count">{{ count }}</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ (count / top_10_tickers[0][1] * 100) if top_10_tickers else 0 }}%"></div>
                             </div>
-                            <div class="comment-text collapsed" id="comment-{{ loop.index }}">
-                                {{ comment.body }}
-                            </div>
-                            {% if comment.tickers %}
-                            <div class="mb-2">
-                                {% for ticker in comment.tickers.split(', ') %}
-                                <span class="ticker-badge">{{ ticker }}</span>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            <div class="timestamp">{{ comment.created_utc }}</div>
-                            <button class="expand-btn" onclick="toggleComment('comment-{{ loop.index }}', this)">
-                                <i class="bi bi-chevron-down"></i> Show More
-                            </button>
-                        </div>
-                    </div>
+                        </td>
+                    </tr>
                     {% endfor %}
-                </div>
-            </div>
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Watchlist - High Quality Multi-Ticker Comments -->
-            {% if watchlist_comments %}
-            <div class="table-container">
-                <h3 class="section-title">
-                    <i class="bi bi-eye-fill"></i>
-                    Watchlist - High Quality Multi-Ticker Comments
-                </h3>
-                <div class="row">
-                    {% for comment in watchlist_comments %}
-                    <div class="col-lg-6 mb-3">
-                        <div class="comment-card" style="border-left-color: var(--warning-color);">
-                            <div class="author-info">
-                                <span class="author-name">{{ comment.author }}</span>
-                                <span class="karma-info">{{ comment.author_total_karma }} karma</span>
-                                <span class="score-badge">{{ comment.score }}</span>
-                                <small class="text-muted">{{ comment.ticker_count }} tickers</small>
-                            </div>
-                            <div class="comment-text collapsed" id="watchlist-{{ loop.index }}">
-                                {{ comment.body }}
-                            </div>
-                            <div class="mb-2">
-                                {% for ticker in comment.tickers.split(', ') %}
-                                <span class="ticker-badge">{{ ticker }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="timestamp">{{ comment.created_utc }}</div>
-                            <button class="expand-btn" onclick="toggleComment('watchlist-{{ loop.index }}', this)">
-                                <i class="bi bi-chevron-down"></i> Show More
-                            </button>
+        <!-- Top 20 Highest Scored Comments -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="bi bi-star-fill"></i>
+                Top 20 Highest Scored Comments
+            </h2>
+            <div class="comment-grid">
+                {% for comment in top_20_comments %}
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="author-info">
+                            <span class="author-name">{{ comment.author }}</span>
+                            <span class="karma-badge">{{ comment.author_total_karma }} karma</span>
                         </div>
+                        <span class="score-badge">{{ comment.score }}</span>
                     </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Latest Comments by Top Tickers -->
-            {% if latest_comments_by_ticker %}
-            <div class="table-container">
-                <h3 class="section-title">
-                    <i class="bi bi-clock-fill"></i>
-                    Latest Comments by Top Tickers
-                </h3>
-                {% for ticker, comments in latest_comments_by_ticker.items() %}
-                <div class="mb-4">
-                    <h5 class="mb-3">
-                        <span class="ticker-badge" style="font-size: 1rem; padding: 6px 12px;">{{ ticker }}</span>
-                        Latest Discussions
-                    </h5>
-                    <div class="row">
-                        {% for comment in comments %}
-                        <div class="col-lg-4 mb-3">
-                            <div class="comment-card" style="border-left-color: var(--success-color);">
-                                <div class="author-info">
-                                    <span class="author-name">{{ comment.author }}</span>
-                                    <span class="karma-info">{{ comment.author_total_karma }} karma</span>
-                                    <span class="score-badge">{{ comment.score }}</span>
-                                </div>
-                                <div class="comment-text collapsed" id="latest-{{ ticker }}-{{ loop.index }}">
-                                    {{ comment.body }}
-                                </div>
-                                <div class="timestamp">{{ comment.created_utc }}</div>
-                                <button class="expand-btn" onclick="toggleComment('latest-{{ ticker }}-{{ loop.index }}', this)">
-                                    <i class="bi bi-chevron-down"></i> Show More
-                                </button>
-                            </div>
-                        </div>
+                    <div class="comment-text collapsed" id="comment-{{ loop.index }}">
+                        {{ comment.body }}
+                    </div>
+                    {% if comment.tickers %}
+                    <div class="tickers-list">
+                        {% for ticker in comment.tickers.split(', ') %}
+                        <span class="ticker-badge">{{ ticker }}</span>
                         {% endfor %}
                     </div>
+                    {% endif %}
+                    <div class="timestamp">{{ comment.created_utc }}</div>
+                    <button class="expand-btn" onclick="toggleComment('comment-{{ loop.index }}', this)">
+                        <i class="bi bi-chevron-down"></i> Show More
+                    </button>
                 </div>
                 {% endfor %}
             </div>
-            {% endif %}
         </div>
+
+        <!-- Watchlist - High Quality Multi-Ticker Comments -->
+        {% if watchlist_comments %}
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="bi bi-eye-fill"></i>
+                Watchlist - High Quality Multi-Ticker Comments
+            </h2>
+            <div class="comment-grid">
+                {% for comment in watchlist_comments %}
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="author-info">
+                            <span class="author-name">{{ comment.author }}</span>
+                            <span class="karma-badge">{{ comment.author_total_karma }} karma</span>
+                            <small style="color: var(--text-secondary);">{{ comment.ticker_count }} tickers</small>
+                        </div>
+                        <span class="score-badge">{{ comment.score }}</span>
+                    </div>
+                    <div class="comment-text collapsed" id="watchlist-{{ loop.index }}">
+                        {{ comment.body }}
+                    </div>
+                    <div class="tickers-list">
+                        {% for ticker in comment.tickers.split(', ') %}
+                        <span class="ticker-badge">{{ ticker }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="timestamp">{{ comment.created_utc }}</div>
+                    <button class="expand-btn" onclick="toggleComment('watchlist-{{ loop.index }}', this)">
+                        <i class="bi bi-chevron-down"></i> Show More
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Latest Comments by Top Tickers -->
+        {% if latest_comments_by_ticker %}
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="bi bi-clock-fill"></i>
+                Latest Comments by Top Tickers
+            </h2>
+            {% for ticker, comments in latest_comments_by_ticker.items() %}
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <span class="ticker-badge" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ ticker }}</span>
+                    <span style="color: var(--text-secondary); font-size: 1rem; font-weight: 400;">Latest Discussions</span>
+                </h3>
+                <div class="comment-grid">
+                    {% for comment in comments %}
+                    <div class="comment-card">
+                        <div class="comment-header">
+                            <div class="author-info">
+                                <span class="author-name">{{ comment.author }}</span>
+                                <span class="karma-badge">{{ comment.author_total_karma }} karma</span>
+                            </div>
+                            <span class="score-badge">{{ comment.score }}</span>
+                        </div>
+                        <div class="comment-text collapsed" id="latest-{{ ticker }}-{{ loop.index }}">
+                            {{ comment.body }}
+                        </div>
+                        <div class="timestamp">{{ comment.created_utc }}</div>
+                        <button class="expand-btn" onclick="toggleComment('latest-{{ ticker }}-{{ loop.index }}', this)">
+                            <i class="bi bi-chevron-down"></i> Show More
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Enhanced Refresh Functionality -->
+    <!-- Enhanced Refresh Functionality with Fixed Timestamp -->
     <script>
         let isRefreshing = false;
+        let refreshInterval = null;
 
         async function refreshData() {
             if (isRefreshing) {
-                return; // Prevent multiple simultaneous refreshes
+                showNotification('⏳ Refresh already in progress...', 'warning');
+                return;
             }
 
             const refreshBtn = document.getElementById('refreshBtn');
@@ -515,18 +607,19 @@
             // Update button state
             isRefreshing = true;
             refreshBtn.disabled = true;
-            refreshIcon.className = 'bi bi-arrow-clockwise spinning me-2';
-            refreshText.textContent = 'Refreshing...';
+            refreshIcon.className = 'bi bi-arrow-clockwise spinning';
+            refreshText.textContent = 'Starting Reddit scraper...';
 
             try {
-                console.log('🔄 Starting data refresh...');
+                console.log('🔄 Starting REAL Reddit data refresh...');
 
-                // First, call the safe refresh endpoint
+                // Show immediate feedback
+                showNotification('🕷️ Starting Reddit scraper - this will take a few minutes...', 'info', 8000);
+
+                // Start the refresh process
                 const refreshResponse = await fetch('/api/refresh', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
                 if (!refreshResponse.ok) {
@@ -534,55 +627,134 @@
                 }
 
                 const refreshResult = await refreshResponse.json();
-                console.log('✅ Refresh response:', refreshResult);
+                console.log('✅ Refresh started:', refreshResult);
 
-                // Wait a moment for dramatic effect
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                if (refreshResult.status === 'already_running') {
+                    showNotification('⏳ Data refresh already in progress', 'info');
+                } else if (refreshResult.status === 'started') {
+                    showNotification('🚀 Reddit scraper launched! Fetching fresh data from r/pennystocks...', 'success', 6000);
+                }
 
-                // Now get the updated data
+                // Start polling for progress
+                startProgressPolling();
+
+            } catch (error) {
+                console.error('❌ Refresh error:', error);
+                showNotification(`❌ Failed to start refresh: ${error.message}`, 'error');
+                resetRefreshButton();
+            }
+        }
+
+        async function startProgressPolling() {
+            let pollCount = 0;
+            const maxPolls = 360; // 30 minutes max (5 second intervals)
+
+            refreshInterval = setInterval(async () => {
+                try {
+                    const statusResponse = await fetch('/api/refresh/status');
+                    const status = await statusResponse.json();
+
+                    console.log('📊 Refresh status:', status);
+
+                    updateRefreshProgress(status);
+
+                    if (!status.is_running) {
+                        clearInterval(refreshInterval);
+
+                        if (status.last_error) {
+                            showNotification(`❌ Refresh failed: ${status.last_error}`, 'error', 10000);
+                            resetRefreshButton();
+                        } else if (status.last_refresh) {
+                            // Success! Get new data and update timestamp
+                            await loadNewData();
+                            showNotification('✅ Fresh data loaded from Reddit! Dashboard updated.', 'success', 7000);
+                            resetRefreshButton();
+                        } else {
+                            showNotification('⚠️ Refresh completed but no data found', 'warning');
+                            resetRefreshButton();
+                        }
+                    }
+
+                    pollCount++;
+                    if (pollCount >= maxPolls) {
+                        clearInterval(refreshInterval);
+                        showNotification('⏰ Refresh timed out after 30 minutes', 'error');
+                        resetRefreshButton();
+                    }
+
+                } catch (error) {
+                    console.error('Error polling status:', error);
+                    clearInterval(refreshInterval);
+                    showNotification('❌ Error checking refresh status', 'error');
+                    resetRefreshButton();
+                }
+            }, 5000); // Poll every 5 seconds
+        }
+
+        function updateRefreshProgress(status) {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const refreshText = refreshBtn.querySelector('.btn-text');
+
+            if (status.is_running) {
+                const progress = status.progress || 0;
+                if (progress <= 25) {
+                    refreshText.textContent = 'Connecting to Reddit API...';
+                } else if (progress <= 50) {
+                    refreshText.textContent = 'Fetching latest comments...';
+                } else if (progress <= 80) {
+                    refreshText.textContent = 'Processing ticker data...';
+                } else {
+                    refreshText.textContent = 'Saving fresh data...';
+                }
+            }
+        }
+
+        async function loadNewData() {
+            try {
+                // Wait a moment to ensure file is fully written
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
                 const dataResponse = await fetch('/api/data');
-
                 if (!dataResponse.ok) {
                     throw new Error(`Data fetch failed: ${dataResponse.status}`);
                 }
 
                 const newData = await dataResponse.json();
-                console.log('📊 New data loaded successfully');
+                console.log('📊 Fresh data loaded from Reddit');
 
-                // Update the page with new data
+                // Update the dashboard with new data (including corrected timestamp)
                 updateDashboard(newData);
 
-                // Update last updated timestamp
-                updateLastUpdatedTime(refreshResult.timestamp);
-
-                // Success feedback
-                showNotification('✅ Data refreshed successfully!', 'success');
-
             } catch (error) {
-                console.error('❌ Refresh error:', error);
-                showNotification(`❌ Refresh failed: ${error.message}`, 'error');
-            } finally {
-                // Reset button state
-                isRefreshing = false;
-                refreshBtn.disabled = false;
-                refreshIcon.className = 'bi bi-arrow-clockwise me-2';
-                refreshText.textContent = 'Refresh Data';
+                console.error('Error loading new data:', error);
+                showNotification('⚠️ Data was refreshed but display update failed. Please reload the page.', 'warning', 8000);
             }
+        }
+
+        function resetRefreshButton() {
+            isRefreshing = false;
+            const refreshBtn = document.getElementById('refreshBtn');
+            const refreshIcon = refreshBtn.querySelector('i');
+            const refreshText = refreshBtn.querySelector('.btn-text');
+
+            refreshBtn.disabled = false;
+            refreshIcon.className = 'bi bi-arrow-clockwise';
+            refreshText.textContent = 'Refresh Data';
         }
 
         function updateDashboard(data) {
             try {
-                // Update summary stats
+                // Update summary stats with animation
                 if (data.summary_stats) {
                     updateElement('total-comments', data.summary_stats.total_comments);
                     updateElement('comments-with-tickers', data.summary_stats.comments_with_tickers);
                     updateElement('unique-tickers', data.summary_stats.unique_tickers);
-                    updateElement('avg-score', data.summary_stats.avg_score);
-                    updateElement('max-score', data.summary_stats.max_score);
-                    updateElement('users-1000-karma', data.summary_stats.users_1000_karma);
+
+                    // MOST IMPORTANTLY: Update the timestamp with the ACTUAL data timestamp
+                    updateLastUpdatedTime(data.summary_stats.last_updated);
                 }
 
-                console.log('📈 Dashboard updated successfully');
+                console.log('📈 Dashboard updated with fresh Reddit data');
             } catch (error) {
                 console.error('Error updating dashboard:', error);
             }
@@ -591,60 +763,68 @@
         function updateElement(id, value) {
             const element = document.getElementById(id);
             if (element) {
-                // Add a subtle animation
-                element.style.opacity = '0.5';
+                element.style.opacity = '0.3';
+                element.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     element.textContent = value;
                     element.style.opacity = '1';
-                }, 150);
+                    element.style.transform = 'scale(1)';
+                    element.style.transition = 'all 0.3s ease';
+                }, 200);
             }
         }
 
         function updateLastUpdatedTime(timestamp) {
-            const elements = document.querySelectorAll('.last-updated .update-time, .update-time');
+            const elements = document.querySelectorAll('.update-time');
             elements.forEach(element => {
                 if (element) {
-                    element.style.opacity = '0.5';
+                    element.style.opacity = '0.3';
                     setTimeout(() => {
                         element.textContent = `Last updated: ${timestamp}`;
                         element.style.opacity = '1';
-                    }, 150);
+                        element.style.transition = 'opacity 0.3s ease';
+
+                        // Add a subtle highlight effect to show it updated
+                        element.parentElement.style.backgroundColor = '#ecfdf5';
+                        element.parentElement.style.borderColor = '#10b981';
+
+                        // Remove highlight after 3 seconds
+                        setTimeout(() => {
+                            element.parentElement.style.backgroundColor = '';
+                            element.parentElement.style.borderColor = '';
+                            element.parentElement.style.transition = 'all 0.5s ease';
+                        }, 3000);
+                    }, 200);
                 }
             });
         }
 
-        function showNotification(message, type) {
+        function showNotification(message, type, duration = 5000) {
             // Remove existing notifications
-            const existing = document.querySelector('.notification');
-            if (existing) {
-                existing.remove();
-            }
+            const existing = document.querySelectorAll('.notification');
+            existing.forEach(n => n.remove());
 
             // Create notification
             const notification = document.createElement('div');
-            notification.className = `notification alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 1050;
-                min-width: 300px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
+            notification.className = `notification ${type}`;
 
             notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                    <div style="flex: 1;">${message}</div>
+                    <button type="button" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; padding: 0;" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
             `;
 
             document.body.appendChild(notification);
 
-            // Auto-remove after 5 seconds
+            // Auto-remove after specified duration
             setTimeout(() => {
                 if (notification.parentElement) {
-                    notification.remove();
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
                 }
-            }, 5000);
+            }, duration);
         }
 
         // Function to toggle comment expansion
@@ -667,10 +847,18 @@
             }
         }
 
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔵 Enhanced refresh system loaded');
-            console.log('✅ Dashboard ready');
+            console.log('🎨 Professional dashboard loaded');
+            console.log('✅ Fixed timestamp + working refresh ready');
+            console.log('🎯 Clean design with minimal colors');
         });
     </script>
 </body>
