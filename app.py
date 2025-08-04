@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Reddit Penny Stocks Dashboard - Professional version with clean metrics
+Reddit Penny Stocks Dashboard - Mobile-Friendly Version with Background Scheduling
 """
 
 import json
@@ -16,6 +16,11 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 import signal
 import sys
+
+# APScheduler imports
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+import atexit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'production-secret-key')
@@ -34,6 +39,10 @@ refresh_status = {
     'last_error': None,
     'progress': 0
 }
+
+# Initialize scheduler
+scheduler = BackgroundScheduler()
+executor = ThreadPoolExecutor(max_workers=1)
 
 def convert_numpy_types(obj):
     """Convert numpy/pandas types to native Python types for JSON serialization"""
@@ -55,17 +64,17 @@ def convert_numpy_types(obj):
         return obj
 
 def get_actual_data_timestamp():
-    """Get the ACTUAL data refresh timestamp - FIXED VERSION"""
+    """Get the ACTUAL data refresh timestamp"""
     # First, try to get timestamp from metadata file (most accurate)
     metadata_file = 'data_metadata.json'
     if os.path.exists(metadata_file):
         try:
             with open(metadata_file, 'r') as f:
                 metadata = json.load(f)
-                if metadata.get('success', False) and metadata.get('scrape_end_time'):
-                    # Convert ISO format back to readable format
-                    end_time = datetime.fromisoformat(metadata['scrape_end_time'])
-                    return end_time.strftime('%Y-%m-%d %H:%M:%S UTC')
+            if metadata.get('success', False) and metadata.get('scrape_end_time'):
+                # Convert ISO format back to readable format
+                end_time = datetime.fromisoformat(metadata['scrape_end_time'])
+                return end_time.strftime('%Y-%m-%d %H:%M:%S UTC')
         except Exception as e:
             logger.warning(f"Error reading metadata file: {e}")
 
@@ -88,7 +97,7 @@ def get_actual_data_timestamp():
     return "No data available"
 
 def load_and_process_data():
-    """Load and process Reddit data - PROFESSIONAL VERSION with only essential metrics"""
+    """Load and process Reddit data - Mobile-optimized version"""
     try:
         data_files = [
             'lounge_thread_filtered_comments.json',
@@ -132,7 +141,7 @@ def load_and_process_data():
             ['author', 'score', 'body', 'tickers', 'created_utc', 'author_total_karma']
         ].to_dict('records')
 
-        # Watchlist comments - matching your repo settings
+        # Watchlist comments
         watchlist_comments = df[
             (df['ticker_count'] >= 4) & 
             (df['author_total_karma'] >= 500)
@@ -151,12 +160,12 @@ def load_and_process_data():
                 ['author', 'score', 'body', 'created_utc', 'author_total_karma']
             ].to_dict('records')
 
-        # CLEAN Summary stats - REMOVED avg_score, max_score, users_1000_karma
+        # Summary stats
         summary_stats = {
             'total_comments': int(len(df)),
             'comments_with_tickers': int(len(df[df['tickers'] != ''])),
             'unique_tickers': int(len(ticker_mentions)),
-            'last_updated': get_actual_data_timestamp()  # FIXED: Use actual data timestamp
+            'last_updated': get_actual_data_timestamp()
         }
 
         # Convert all numpy types to native Python types
@@ -175,7 +184,7 @@ def load_and_process_data():
         return None
 
 def run_reddit_scraper():
-    """Run the Reddit scraper in a separate thread"""
+    """Run the Reddit scraper in a separate thread - Non-blocking version"""
     global refresh_status
 
     try:
@@ -188,7 +197,7 @@ def run_reddit_scraper():
         # Update progress
         refresh_status['progress'] = 25
 
-        # Run the update_data.py script (which calls reddit_scrapper.py with proper metadata)
+        # Run the update_data.py script with timeout
         result = subprocess.run([
             sys.executable, 'update_data.py'
         ], capture_output=True, text=True, timeout=1800)  # 30 minute timeout
@@ -200,20 +209,15 @@ def run_reddit_scraper():
             refresh_status['progress'] = 100
             refresh_status['last_refresh'] = datetime.now().isoformat()
 
-            # Validate the output file and metadata
+            # Validate the output file
             if os.path.exists('lounge_thread_filtered_comments.json'):
                 with open('lounge_thread_filtered_comments.json', 'r') as f:
                     data = json.load(f)
-                    if len(data) > 0:
-                        logger.info(f"✅ Validated: {len(data)} comments collected")
-
-                        # Check if metadata was written
-                        if os.path.exists('data_metadata.json'):
-                            logger.info("✅ Metadata file created")
-
-                        return True
-                    else:
-                        raise Exception("No comments found in output file")
+                if len(data) > 0:
+                    logger.info(f"✅ Validated: {len(data)} comments collected")
+                    return True
+                else:
+                    raise Exception("No comments found in output file")
             else:
                 raise Exception("Output file not created")
         else:
@@ -236,8 +240,13 @@ def run_reddit_scraper():
         refresh_status['is_running'] = False
         refresh_status['progress'] = 0
 
-# Thread executor for background tasks
-executor = ThreadPoolExecutor(max_workers=1)
+def scheduled_scraper_job():
+    """Background job that runs every 30 minutes"""
+    logger.info("🕐 Running scheduled scraper job...")
+    if not refresh_status['is_running']:
+        executor.submit(run_reddit_scraper)
+    else:
+        logger.info("Scraper already running, skipping scheduled run")
 
 @app.route('/')
 def dashboard():
@@ -250,13 +259,12 @@ def dashboard():
 
 @app.route('/api/data')
 def api_data():
-    """API endpoint for data refresh - FIXED JSON serialization"""
+    """API endpoint for data refresh"""
     try:
         data = load_and_process_data()
         if not data:
             return jsonify({'error': 'Error loading data'}), 500
 
-        # Data is already converted to JSON-safe types
         return jsonify(data)
 
     except Exception as e:
@@ -265,7 +273,7 @@ def api_data():
 
 @app.route('/api/refresh', methods=['POST'])
 def refresh_data():
-    """Enhanced refresh endpoint that actually runs the scraper"""
+    """Non-blocking refresh endpoint"""
     global refresh_status
 
     try:
@@ -277,7 +285,7 @@ def refresh_data():
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')
             })
 
-        # Start the scraper in background
+        # Start the scraper in background (non-blocking)
         future = executor.submit(run_reddit_scraper)
 
         # Give it a moment to start
@@ -285,7 +293,7 @@ def refresh_data():
 
         return jsonify({
             'status': 'started',
-            'message': 'Reddit data scraping started',
+            'message': 'Reddit data scraping started in background',
             'progress': refresh_status['progress'],
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')
         })
@@ -323,7 +331,7 @@ def health_check():
             'refresh_running': refresh_status['is_running'],
             'data_timestamp': get_actual_data_timestamp(),
             'timestamp': datetime.now().isoformat(),
-            'version': '3.0.0-professional'
+            'version': '4.0.0-mobile-responsive'
         }), 200 if data else 503
     except Exception as e:
         logger.error(f"Health check failed: {e}")
@@ -336,13 +344,42 @@ def health_check():
 def signal_handler(sig, frame):
     """Handle shutdown signals gracefully"""
     logger.info('Shutting down gracefully...')
-    executor.shutdown(wait=True)
+    if scheduler.running:
+        scheduler.shutdown(wait=False)
+    executor.shutdown(wait=False)
     sys.exit(0)
 
 # Register signal handlers
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
+# Initialize scheduler
+def init_scheduler():
+    """Initialize the background scheduler"""
+    if not scheduler.running:
+        # Add job to run every 30 minutes
+        scheduler.add_job(
+            func=scheduled_scraper_job,
+            trigger=IntervalTrigger(minutes=30),
+            id='reddit_scraper_job',
+            name='Reddit Scraper - Every 30 minutes',
+            replace_existing=True
+        )
+        
+        scheduler.start()
+        logger.info("✅ Background scheduler started - will run every 30 minutes")
+        
+        # Run initial scrape if no data exists
+        if not os.path.exists('lounge_thread_filtered_comments.json'):
+            logger.info("🚀 No existing data found, running initial scrape...")
+            executor.submit(run_reddit_scraper)
+
+# Ensure scheduler shuts down when app stops
+atexit.register(lambda: scheduler.shutdown() if scheduler.running else None)
+
 if __name__ == '__main__':
+    # Initialize scheduler
+    init_scheduler()
+    
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
