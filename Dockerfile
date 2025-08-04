@@ -10,10 +10,11 @@ ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# Install system dependencies
+# Install system dependencies including supervisor
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (for better Docker layer caching)
@@ -28,14 +29,18 @@ COPY . .
 # Create logs directory
 RUN mkdir -p logs
 
+# Create supervisor configuration
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash app \
-    && chown -R app:app /app
+    && chown -R app:app /app \
+    && chown -R app:app /var/log/supervisor
+
 USER app
 
 # Expose port
 EXPOSE 5000
 
-# Run the application with gunicorn
-# No HEALTHCHECK - let Coolify handle health checks via /health endpoint
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "app:app"]
+# Run supervisor to manage both processes
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
