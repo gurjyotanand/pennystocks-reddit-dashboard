@@ -5,3 +5,4 @@ praw
 reticker
 python-dotenv
 requests
+apscheduler
